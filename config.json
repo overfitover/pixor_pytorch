@@ -3,11 +3,11 @@
   "resume_training": false,
   "old_ckpt_name": "ALLImage_10epoch",
 
-  "batch_size": 4,
+  "batch_size": 1,
   "learning_rate": 0.001,
   "momentum": 0.9,
   "lr_decay_every": 10,
-  "max_epochs": 10,
+  "max_epochs": 100,
   "save_every": 2,
 
   "use_bn": true,

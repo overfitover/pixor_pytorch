@@ -4,4 +4,5 @@ visual/*
 *.pyc
 pretrained_models/*
 KITTI/*
+Models/pixor*
 

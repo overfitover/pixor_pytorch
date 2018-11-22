@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import Models.cfemodule as cfe
 
 def conv3x3(in_planes, out_planes, stride=1, bias=False):
     """3x3 convolution with padding"""
@@ -82,7 +83,9 @@ class BackBone(nn.Module):
 
         # Block 1
         self.conv1 = conv3x3(36, 32)
+        self.cfe1 = cfe.CFEM(32, 32, stride=1, scale=1, groups=8, dilation=1, thinning=2)
         self.conv2 = conv3x3(32, 32)
+        self.cfe2 = cfe.CFEM(32, 32, stride=1, scale=1, groups=8, dilation=1, thinning=2)
         self.bn1 = nn.BatchNorm2d(32)
         self.bn2 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU(inplace=True)
@@ -91,9 +94,13 @@ class BackBone(nn.Module):
         # Block 2
         self.in_planes = 32
         self.block2 = self._make_layer(block, 24, num_blocks=num_block[0])
+        # self.cfe2_2 = cfe.CFEM(96, 96, stride=1, scale=1, groups=8, dilation=1, thinning=2)
         self.block3 = self._make_layer(block, 48, num_blocks=num_block[1])
+        self.cfe3 = cfe.CFEM(192, 192, stride=1, scale=1, groups=8, dilation=1, thinning=2)
         self.block4 = self._make_layer(block, 64, num_blocks=num_block[2])
+        self.cfe4 = cfe.CFEM(256, 256, stride=1, scale=1, groups=8, dilation=1, thinning=2)
         self.block5 = self._make_layer(block, 96, num_blocks=num_block[3])
+        self.cfe5 = cfe.CFEM(384, 384, stride=1, scale=1, groups=8, dilation=1, thinning=2)
 
         # Lateral layers
         self.latlayer1 = nn.Conv2d(384, 196, kernel_size=1, stride=1, padding=0)
@@ -103,23 +110,30 @@ class BackBone(nn.Module):
         # Top-down layers
         self.deconv1 = nn.ConvTranspose2d(196, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
         self.deconv2 = nn.ConvTranspose2d(128, 96, kernel_size=3, stride=2, padding=1, output_padding=(1, 0))
+        
 
     def forward(self, x):
         x = self.conv1(x)
+        x = self.cfe1(x)
         if self.use_bn:
             x = self.bn1(x)
         x = self.relu(x)
 
         x = self.conv2(x)
+        x = self.cfe2(x)
         if self.use_bn:
             x = self.bn2(x)
         c1 = self.relu(x)
 
         # bottom up layers
         c2 = self.block2(c1)
+        # c2 = self.cfe2_2(c2)
         c3 = self.block3(c2)
+        c3 = self.cfe3(c3)
         c4 = self.block4(c3)
+        # c4 = self.cfe4(c4)
         c5 = self.block5(c4)
+        # c5 = self.cfe5(c5)
 
         l5 = self.latlayer1(c5)
         l4 = self.latlayer2(c4)
@@ -166,7 +180,6 @@ class BackBone(nn.Module):
         '''
         _, _, H, W = y.size()
         return F.upsample(x, size=(H, W), mode='bilinear') + y
-
 
 
 class Header(nn.Module):

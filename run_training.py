@@ -20,7 +20,7 @@ sys.path.insert(0, './')
 
 # argumentparse
 parser = ArgumentParser()
-parser.add_argument('-bs', '--batch_size', type=int, default=2, help="batch size of the data")
+parser.add_argument('-bs', '--batch_size', type=int, default=1, help="batch size of the data")
 parser.add_argument('-e', '--epochs', type=int, default=100, help='epoch of the train')
 parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3, help='learning rate')
 args = parser.parse_args()
@@ -146,10 +146,9 @@ if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     # if not os.path.exists('pretrained_model/'):
     #         os.makedir('pretrained_model/')
-    
     for epoch in range(max_epochs):
-        # train(epoch)
-        val(epoch)
+        train(epoch)
+        # val(epoch)
         # adjust learning rate
         if epoch  == 2:
             learning_rate *= 0.1

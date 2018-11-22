@@ -114,13 +114,13 @@ class BackBone(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
-        x = self.cfe1(x)
+        # x = self.cfe1(x)
         if self.use_bn:
             x = self.bn1(x)
         x = self.relu(x)
 
         x = self.conv2(x)
-        x = self.cfe2(x)
+        # x = self.cfe2(x)
         if self.use_bn:
             x = self.bn2(x)
         c1 = self.relu(x)
@@ -129,7 +129,7 @@ class BackBone(nn.Module):
         c2 = self.block2(c1)
         # c2 = self.cfe2_2(c2)
         c3 = self.block3(c2)
-        c3 = self.cfe3(c3)
+        # c3 = self.cfe3(c3)
         c4 = self.block4(c3)
         # c4 = self.cfe4(c4)
         c5 = self.block5(c4)

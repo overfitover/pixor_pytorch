@@ -1,0 +1,7 @@
+train*
+runs/*
+visual/*
+*.pyc
+pretrained_models/*
+KITTI/*
+

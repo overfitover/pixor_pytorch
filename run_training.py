@@ -8,7 +8,7 @@ import torchvision
 from torch.optim import Adam
 # from tensorboardX import SummaryWriter
 from argparse import ArgumentParser
-
+import torch.backends.cudnn as cudnn
 import time
 from Loss.loss import CustomLoss
 from data_processor.datagen import get_data_loader
@@ -43,6 +43,7 @@ train_data_loader, val_data_loader = get_data_loader(batch_size=batch_size, use_
 # model
 if use_cuda:
     device = 'cuda'
+    cudnn.benchmark = True
     net = PIXOR(config['use_bn']).to(device)
 else:
     device = 'cpu'
@@ -142,8 +143,9 @@ def val(epoch):
 
 
 if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     # if not os.path.exists('pretrained_model/'):
-    #         os.mkdir('pretrained_model/')
+    #         os.makedir('pretrained_model/')
     
     for epoch in range(max_epochs):
         # train(epoch)

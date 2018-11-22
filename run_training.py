@@ -18,6 +18,7 @@ from post_process.postprocess import non_max_suppression
 import sys
 sys.path.insert(0, './')
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # argumentparse
 parser = ArgumentParser()
 parser.add_argument('-bs', '--batch_size', type=int, default=1, help="batch size of the data")
@@ -145,7 +146,7 @@ def val(epoch):
 if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     # if not os.path.exists('pretrained_model/'):
-    #         os.makedir('pretrained_model/')
+    #         os.makedirs('pretrained_model/')
     for epoch in range(max_epochs):
         train(epoch)
         # val(epoch)

@@ -9,6 +9,7 @@ from post_process.postprocess import non_max_suppression
 import sys
 import cv2
 sys.path.insert(0, './')
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def build_model(config, device, train=True):
     net = PIXOR(config['use_bn']).to(device)

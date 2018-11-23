@@ -12,7 +12,7 @@ import torch.backends.cudnn as cudnn
 import time
 from Loss.loss import CustomLoss
 from data_processor.datagen import get_data_loader
-from Models.model import PIXOR
+from Models.model1 import PIXOR
 from utils import get_model_name, load_config, plot_bev, plot_label_map
 from post_process.postprocess import non_max_suppression
 import sys
@@ -104,7 +104,7 @@ def train(epoch):
     # model save
     if not os.path.exists('pretrained_models'):
         os.makedirs('pretrained_models')
-    if (epoch) % 10 == 0:
+    if (epoch) % 2 == 0:
         torch.save(net.state_dict(), 'pretrained_models/model_%d.pth'%epoch)  # save for 5 epochs
     total_loss /= len(train_data_loader)
     print('train epoch [%d/%d] average_loss %.5f' % (epoch, max_epochs, total_loss))

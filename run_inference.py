@@ -3,7 +3,7 @@ import time
 import os
 from Loss.loss import CustomLoss
 from data_processor.datagen import get_data_loader
-from Models.model import PIXOR
+from Models.model1 import PIXOR
 from utils import get_model_name, load_config, plot_bev, plot_label_map
 from post_process.postprocess import non_max_suppression
 import sys
@@ -11,14 +11,14 @@ import cv2
 sys.path.insert(0, './')
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-def build_model(config, device, train=True):
-    net = PIXOR(config['use_bn']).to(device)
-    criterion = CustomLoss(device=device, num_classes=1)
-    if not train:
-        return net, criterion
-    optimizer = torch.optim.SGD(net.parameters(), lr=config['learning_rate'], momentum=config['momentum'])
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=config['lr_decay_every'], gamma=0.1)
-    return net, criterion, optimizer, scheduler
+# def build_model(config, device, train=True):
+#     net = PIXOR(config['use_bn']).to(device)
+#     criterion = CustomLoss(device=device, num_classes=1)
+#     if not train:
+#         return net, criterion
+#     optimizer = torch.optim.SGD(net.parameters(), lr=config['learning_rate'], momentum=config['momentum'])
+#     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=config['lr_decay_every'], gamma=0.1)
+#     return net, criterion, optimizer, scheduler
 
 def inference():
     # evaluation
@@ -26,9 +26,13 @@ def inference():
     config, _, _, _ = load_config(config_name)
     if torch.cuda.is_available():
         device = 'cuda'
+        net = PIXOR(config['use_bn']).cuda()
     else:
         device = 'cpu'
-    net, criterion = build_model(config, device, train=False)
+        net = PIXOR(config['use_bn']).cpu()
+
+    # net, criterion = build_model(config, device, train=False)
+    
     net.load_state_dict(torch.load(get_model_name(config['name']), map_location=device))
     net.set_decode(True)
     loader, _ = get_data_loader(batch_size=1, use_npy=config['use_npy'], frame_range=config['frame_range'])

@@ -89,5 +89,6 @@ if __name__=='__main__':
     # print(CFEM(512, 512, stride=1, scale=1, groups=8, dilation=1, thinning=2))
     net = CFEM(32, 32, stride=1, scale=1, groups=8, dilation=1, thinning=2)
     input_data = torch.randn(1, 32, 800, 700)
+    
     out = net(input_data)
     print(out.shape)

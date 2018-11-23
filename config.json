@@ -1,5 +1,5 @@
 {
-  "name": "model_90.pth",
+  "name": "model_0.pth",
   "resume_training": false,
   "old_ckpt_name": "ALLImage_10epoch",
 
@@ -7,7 +7,7 @@
   "learning_rate": 0.001,
   "momentum": 0.9,
   "lr_decay_every": 10,
-  "max_epochs": 100,
+  "max_epochs": 20,
   "save_every": 2,
 
   "use_bn": true,

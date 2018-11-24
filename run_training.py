@@ -144,7 +144,7 @@ def val(epoch):
 
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     # if not os.path.exists('pretrained_model/'):
     #         os.makedirs('pretrained_model/')
     for epoch in range(max_epochs):

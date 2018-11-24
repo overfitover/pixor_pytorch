@@ -58,6 +58,8 @@ $ python run_inference.py
 ![ground truth](./picture_results/gt.png)
 ## prediction
 ![ prediction](./picture_results/predict.png)
+## prediction (add se_module)
+![ se_module](./picture_results/predict_ce_module.png)
 
 # TODO
 - [ ] improve the performances

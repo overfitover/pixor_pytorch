@@ -52,6 +52,7 @@ $ python run_training.py
 ```bash
 $ python run_inference.py
 ```
+**by the way**　在ｍｏｄｅｌ里面有７层ｓｅ_module,你可以尝试不同的组合是否可以提升网络的效果。
 
 # results
 ## GT

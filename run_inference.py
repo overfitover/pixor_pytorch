@@ -78,10 +78,10 @@ def inference():
 
         # Visualization
         pc_feature = pc_feature.cpu().numpy()                        # (800, 700, 36)
-        plot_bev(pc_feature, label_list, window_name='GT')
-        plot_bev(pc_feature, corners, window_name='Prediction')
-        plot_label_map(cls_pred.cpu().numpy())
-        cv2.waitKey (0)  
+        plot_bev(pc_feature,corners, label_list, window_name='predict_GT')
+        # plot_bev(pc_feature, corners, window_name='Prediction')
+        # plot_label_map(cls_pred.cpu().numpy())
+        # cv2.waitKey (0)  
         
 
 if __name__=='__main__':

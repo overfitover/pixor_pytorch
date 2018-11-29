@@ -74,7 +74,7 @@ class CustomLoss(nn.Module):
 
         cls_loss = cls_loss / (batch_size * image_size)
         print('loc_loss: %.5f | cls_loss: %.5f' % (loc_loss.data, cls_loss.data))
-        return cls_loss + loc_loss
+        return cls_loss + loc_loss, cls_loss, loc_loss
 
 
 def test():

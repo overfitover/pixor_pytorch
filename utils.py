@@ -31,7 +31,7 @@ def transform_metric2label(metric, ratio=4, grid_size=0.1, base_height=100):
     return label
 
 
-def plot_bev(velo_array, label_list = None, map_height=800, window_name='GT'):
+def plot_bev(velo_array,predict_list=None, label_list = None, map_height=800, window_name='GT'):
     '''
     Plot a Birds Eye View Lidar and Bounding boxes (Using OpenCV!)
     The heading of the vehicle is marked as a red line
@@ -53,6 +53,18 @@ def plot_bev(velo_array, label_list = None, map_height=800, window_name='GT'):
     intensity[:, :, 2] = val
     # FLip in the x direction
 
+
+    if predict_list is not None:
+        for corners in predict_list:
+            plot_corners = corners/0.1
+            plot_corners[:, 1] += int(map_height//2)
+            plot_corners[:, 1] = map_height - plot_corners[:, 1]
+            plot_corners = plot_corners.astype(int).reshape((-1, 1, 2))
+            cv2.polylines(intensity, [plot_corners], True, (0,0,255), 2)
+            cv2.line(intensity, tuple(plot_corners[2, 0]), tuple(plot_corners[3, 0]), (0,255,255), 6)
+        
+        # misc.imsave('image/eval_bv'+"predict"+".png", intensity)
+
     if label_list is not None:
         for corners in label_list:
             plot_corners = corners / 0.1
@@ -60,9 +72,10 @@ def plot_bev(velo_array, label_list = None, map_height=800, window_name='GT'):
             plot_corners[:, 1] = map_height - plot_corners[:, 1]
             plot_corners = plot_corners.astype(int).reshape((-1, 1, 2))
             cv2.polylines(intensity, [plot_corners], True, (255, 0, 0), 2)
-            cv2.line(intensity, tuple(plot_corners[2, 0]), tuple(plot_corners[3, 0]), (0, 0, 255), 3)
-
-    cv2.imshow(window_name, intensity)
+            cv2.line(intensity, tuple(plot_corners[2, 0]), tuple(plot_corners[3, 0]), (128, 0, 128), 6)
+    # cv2.imshow(window_name, intensity)
+    plt.imshow(intensity)
+    plt.show()
 
 
 def plot_label_map(label_map):

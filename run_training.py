@@ -6,7 +6,7 @@ import torch.utils.data.dataloader
 import numpy as np
 import torchvision
 from torch.optim import Adam
-# from tensorboardX import SummaryWriter
+from tensorboardX import SummaryWriter
 from argparse import ArgumentParser
 import torch.backends.cudnn as cudnn
 import time
@@ -27,7 +27,7 @@ parser.add_argument('-lr', '--learning_rate', type=float, default=1e-3, help='le
 args = parser.parse_args()
 
 # import visualize
-# writer = SummaryWriter()
+writer = SummaryWriter()
 
 batch_size = args.batch_size
 learning_rate = args.learning_rate
@@ -71,7 +71,7 @@ def train(epoch):
         pc_feature = Variable(pc_feature)
         label_map = Variable(label_map)
         predictions = net(pc_feature)
-        loss = criterion(predictions, label_map)
+        loss, cls_loss, loc_loss = criterion(predictions, label_map)
         loss /= N
         optimizer.zero_grad()
         loss.backward()
@@ -84,22 +84,83 @@ def train(epoch):
                                                                                  max_epochs, batch_idx,
                                                                                  len(train_data_loader), learning_rate,
                                                                                  total_loss / (batch_idx + 1)))
+    # visiualize scalar
+    if True:
+        if epoch % 1 == 0:
+            # print ("begin summary.....")
+            if True:
+                b,w,h,c = pc_feature.size()
+                pc_feature1 = pc_feature[0,:,:,:3].view(w,h,3).permute(2, 0, 1)
+                pc_feature2 = pc_feature[0,:,:,3:6].view(w,h,3).permute(2, 0, 1)
+                pc_feature3 = pc_feature[0,:,:,6:9].view(w,h,3).permute(2, 0, 1)
+                pc_feature4 = pc_feature[0,:,:,9:12].view(w,h,3).permute(2, 0, 1)
+                pc_feature5 = pc_feature[0,:,:,12:15].view(w,h,3).permute(2, 0, 1)
+                pc_feature6 = pc_feature[0,:,:,15:18].view(w,h,3).permute(2, 0, 1)
+                writer.add_image("feature1", pc_feature1, epoch)
+                writer.add_image("feature2", pc_feature2, epoch)
+                writer.add_image("feature3", pc_feature3, epoch)
+                writer.add_image("feature4", pc_feature4, epoch)
+                writer.add_image("feature5", pc_feature5, epoch)
+                writer.add_image("feature6", pc_feature6, epoch)
+                
+            if True:
+                writer.add_scalar("total_loss", total_loss, epoch)
+                writer.add_scalar("cls_loss", cls_loss, epoch)
+                writer.add_scalar("loc_loss", loc_loss, epoch)
 
-        # # visiualize scalar
-        # if epoch % 10 == 0:
-        #     label_img = tools.labelToimg(labels[0])
-        #     net_out = out[0].data.max(1)[1].squeeze_(0)
-        #     out_img = tools.labelToimg(net_out)
-        #     writer.add_scalar("loss", loss, epoch)
-        #     writer.add_scalar("total_loss", total_loss, epoch)
-        #     writer.add_scalars('loss/scalar_group', {"loss": epoch * loss,
-        #                                              "total_loss": epoch * total_loss})
-        #     writer.add_image('Image', imgs[0], epoch)
-        #     writer.add_image('label', label_img, epoch)
-        #     writer.add_image("out", out_img, epoch)
+                b,w,h,c = predictions.size()
+                predictions0 = predictions[0,:,:,0].view(w,h,1).permute(2,0,1)
+                predictions1 = predictions[0,:,:,1].view(w,h,1).permute(2,0,1)
+                predictions2 = predictions[0,:,:,2].view(w,h,1).permute(2,0,1)
+                predictions3 = predictions[0,:,:,3].view(w,h,1).permute(2,0,1)
+                predictions4 = predictions[0,:,:,4].view(w,h,1).permute(2,0,1)
+                predictions5 = predictions[0,:,:,5].view(w,h,1).permute(2,0,1)
+                predictions6 = predictions[0,:,:,6].view(w,h,1).permute(2,0,1)
 
-        assert total_loss is not np.nan
-        assert total_loss is not np.inf
+                writer.add_image('predictions0', predictions0, epoch)
+                writer.add_image("predictions1", predictions1, epoch)
+                writer.add_image("predictions2", predictions2, epoch)
+                writer.add_image("predictions3", predictions3, epoch)
+                writer.add_image("predictions4", predictions4, epoch)
+                writer.add_image("predictions5", predictions5, epoch)
+                writer.add_image("predictions6", predictions6, epoch)
+
+            if True:
+                # writer for predict 3 layer
+                b,w,h,c = predictions.size()
+                predictions0_3 = predictions[0,:,:,:3].view(w,h,3).permute(2,0,1)
+                predictions3_6 = predictions[0,:,:,3:6].view(w,h,3).permute(2,0,1)
+
+                writer.add_image('predict0-3', predictions0_3, epoch)
+                writer.add_image('predict3-6', predictions3_6, epoch)
+
+            if True:
+                    # writer for label
+                    b,w,h,c = label_map.size()
+                    label_map0 = label_map[0,:,:,0].view(w,h,1).permute(2,0,1)
+                    label_map1 = label_map[0,:,:,1].view(w,h,1).permute(2,0,1)
+                    label_map2 = label_map[0,:,:,2].view(w,h,1).permute(2,0,1)
+                    label_map3 = label_map[0,:,:,3].view(w,h,1).permute(2,0,1)
+                    label_map4 = label_map[0,:,:,4].view(w,h,1).permute(2,0,1)
+                    label_map5 = label_map[0,:,:,5].view(w,h,1).permute(2,0,1)
+                    label_map6 = label_map[0,:,:,6].view(w,h,1).permute(2,0,1)
+
+                    label_map0_3 = label_map[0,:,:,:3].view(w,h,3).permute(2,0,1)
+                    label_map3_6 = label_map[0,:,:,3:6].view(w,h,3).permute(2,0,1)
+
+                    writer.add_image('label_map0', label_map0, epoch)
+                    writer.add_image("label_map1", label_map1, epoch)
+                    writer.add_image("label_map2", label_map2, epoch)
+                    writer.add_image("label_map3", label_map3, epoch)
+                    writer.add_image("label_map4", label_map4, epoch)
+                    writer.add_image("label_map5", label_map5, epoch)
+                    writer.add_image("label_map6", label_map6, epoch)
+                    writer.add_image("label_map0_3", label_map0_3, epoch)
+                    writer.add_image("label_map3_6", label_map3_6, epoch)
+                    
+
+            assert total_loss is not np.nan
+            assert total_loss is not np.inf
 
     # model save
     if not os.path.exists('pretrained_models'):

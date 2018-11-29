@@ -52,7 +52,7 @@ $ python run_training.py
 ```bash
 $ python run_inference.py
 ```
-**by the way**　在ｍｏｄｅｌ里面有７层ｓｅ_module,你可以尝试不同的组合是否可以提升网络的效果。
+**by the way**　在model里面有７层se_module,你可以尝试不同的组合是否可以提升网络的效果。
 
 # results
 ## GT
@@ -60,10 +60,11 @@ $ python run_inference.py
 ## prediction
 ![ prediction](./picture_results/predict.png)
 ## prediction (add se_module)
-![ se_module](./picture_results/predict_ce_module.png)
+![ se_module](./picture_results/predict_ce_module.png)  
+## prediction  
+![prediction_label](./picture_results/predict_label.png)
 
 # TODO
-- [ ] improve the performances
-- [ ] reproduce results for `Pedestrian` and `Cyclist`
-- [ ] provide SummaryWriter()
+- [X] improve the performances
+- [X] provide SummaryWriter()
 - [ ] provide run_evaluate.py

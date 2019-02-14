@@ -63,8 +63,8 @@ $ python run_inference.py
 ![ se_module](./picture_results/predict_ce_module.png)
 
 # TODO
-- [ ] datagen.py maybe has a problem. h w l x y z   w h l y z x.
-- [ ] improve the performances
+- [X] datagen.py maybe has a problem. h w l x y z   w h l y z x.
+- [X] improve the performances
 - [ ] reproduce results for `Pedestrian` and `Cyclist`
-- [ ] provide SummaryWriter()
+- [X] provide SummaryWriter()
 - [ ] provide run_evaluate.py

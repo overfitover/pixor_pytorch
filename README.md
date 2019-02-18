@@ -3,7 +3,7 @@
 This is an unofficial inplementation of [Bird's Eye View Object Detection Algorithm for self-driving Cars] [PIXOR](http://openaccess.thecvf.com/content_cvpr_2018/CameraReady/3012.pdf) in Pytorch. A large part of this project is based on the work [here](https://github.com/ankita-kalra/PIXOR). Thanks to [@Ankita Kalra](https://github.com/ankita-kalra). This work is still ongoing.
 
 # Handling colored points clouds
-Handling colored clouds
+https://github.com/overfitover/pixor_ovo
 # Dependencies
 - `python3.5+`
 - `Pytorch` (tested on 0.4.1)
